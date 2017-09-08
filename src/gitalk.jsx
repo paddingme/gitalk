@@ -178,27 +178,27 @@ class GitalkComponent extends Component {
       return Promise.resolve(issue)
     }
 
-    const { owner, repo, id, labels, clientID, clientSecret } = this.options
+    const { owner, repo, id, labels, clientID, clientSecret, issueId} = this.options
 
-    return axiosGithub.get(`/repos/${owner}/${repo}/issues`, {
+    return axiosGithub.get(`/repos/${owner}/${repo}/issues/${issueId}`, {
       params: {
         client_id: clientID,
         client_secret: clientSecret,
-        labels: labels.concat(id).join(',')
+        // labels: labels.concat(id).join(',')
       }
     }).then(res => {
       const { admin, createIssueManually } = this.options
       const { user } = this.state
       let isNoInit = false
       let issue = null
-      if (!(res && res.data && res.data.length)) {
+      if (!(res && res.data)) {
         if (!createIssueManually && user && ~admin.indexOf(user.login)) {
           return this.createIssue()
         }
 
         isNoInit = true
       } else {
-        issue = res.data[0]
+        issue = res.data
       }
       this.setState({ issue, isNoInit })
       return issue

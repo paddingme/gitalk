@@ -1868,45 +1868,43 @@ var emptyFunction = __webpack_require__(4);
 var warning = emptyFunction;
 
 if (process.env.NODE_ENV !== 'production') {
-  (function () {
-    var printWarning = function printWarning(format) {
-      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
       }
 
-      var argIndex = 0;
-      var message = 'Warning: ' + format.replace(/%s/g, function () {
-        return args[argIndex++];
-      });
-      if (typeof console !== 'undefined') {
-        console.error(message);
-      }
-      try {
-        // --- Welcome to debugging React ---
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-      } catch (x) {}
-    };
-
-    warning = function warning(condition, format) {
-      if (format === undefined) {
-        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-      }
-
-      if (format.indexOf('Failed Composite propType: ') === 0) {
-        return; // Ignore CompositeComponent proptype check.
-      }
-
-      if (!condition) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-          args[_key2 - 2] = arguments[_key2];
-        }
-
-        printWarning.apply(undefined, [format].concat(args));
-      }
-    };
-  })();
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
 }
 
 module.exports = warning;
@@ -3894,14 +3892,15 @@ var GitalkComponent = function (_Component) {
           id = _options.id,
           labels = _options.labels,
           clientID = _options.clientID,
-          clientSecret = _options.clientSecret;
+          clientSecret = _options.clientSecret,
+          issueId = _options.issueId;
 
 
-      return _util.axiosGithub.get('/repos/' + owner + '/' + repo + '/issues', {
+      return _util.axiosGithub.get('/repos/' + owner + '/' + repo + '/issues/' + issueId, {
         params: {
           client_id: clientID,
-          client_secret: clientSecret,
-          labels: labels.concat(id).join(',')
+          client_secret: clientSecret
+          // labels: labels.concat(id).join(',')
         }
       }).then(function (res) {
         var _options2 = _this4.options,
@@ -3911,14 +3910,14 @@ var GitalkComponent = function (_Component) {
 
         var isNoInit = false;
         var issue = null;
-        if (!(res && res.data && res.data.length)) {
+        if (!(res && res.data)) {
           if (!createIssueManually && user && ~admin.indexOf(user.login)) {
             return _this4.createIssue();
           }
 
           isNoInit = true;
         } else {
-          issue = res.data[0];
+          issue = res.data;
         }
         _this4.setState({ issue: issue, isNoInit: isNoInit });
         return issue;
@@ -6408,121 +6407,31 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     (c) 2012 
 /* 35 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"init": "Gitalk 加载中 ...",
-	"no-found-related": "未找到相关的 %{link} 进行评论",
-	"please-contact": "请联系 %{user} 初始化创建",
-	"init-issue": "初始化 Issue",
-	"leave-a-comment": "说点什么",
-	"comment": "评论",
-	"support-markdown": "支持 Markdown 语法",
-	"login-with-github": "使用 Github 登录",
-	"first-comment-person": "来做第一个留言的人吧！",
-	"commented": "发表于",
-	"load-more": "加载更多",
-	"power": "由 %{link} 驱动",
-	"counts": "%{counts} 条评论",
-	"sort-asc": "从旧到新排序",
-	"sort-desc": "从新到旧排序",
-	"logout": "注销",
-	"anonymous": "未登录用户"
-};
+module.exports = {"init":"Gitalk 加载中 ...","no-found-related":"未找到相关的 %{link} 进行评论","please-contact":"请联系 %{user} 初始化创建","init-issue":"初始化 Issue","leave-a-comment":"说点什么","comment":"评论","support-markdown":"支持 Markdown 语法","login-with-github":"使用 Github 登录","first-comment-person":"来做第一个留言的人吧！","commented":"发表于","load-more":"加载更多","power":"由 %{link} 驱动","counts":"%{counts} 条评论","sort-asc":"从旧到新排序","sort-desc":"从新到旧排序","logout":"注销","anonymous":"未登录用户"}
 
 /***/ }),
 /* 36 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"init": "Gitalk 加載中 ...",
-	"no-found-related": "未找到相關的 %{link} 進行評論",
-	"please-contact": "請聯系 %{user} 初始化創建",
-	"init-issue": "初始化 Issue",
-	"leave-a-comment": "說點什麽",
-	"comment": "評論",
-	"support-markdown": "支持 Markdown 語法",
-	"login-with-github": "使用 Github 登錄",
-	"first-comment-person": "來做第一個留言的人吧！",
-	"commented": "發表於",
-	"load-more": "加載更多",
-	"power": "由 %{link} 驅動",
-	"counts": "%{counts} 條評論",
-	"sort-asc": "從舊到新排序",
-	"sort-desc": "從新到舊排序",
-	"logout": "註銷",
-	"anonymous": "未登錄用戶"
-};
+module.exports = {"init":"Gitalk 加載中 ...","no-found-related":"未找到相關的 %{link} 進行評論","please-contact":"請聯系 %{user} 初始化創建","init-issue":"初始化 Issue","leave-a-comment":"說點什麽","comment":"評論","support-markdown":"支持 Markdown 語法","login-with-github":"使用 Github 登錄","first-comment-person":"來做第一個留言的人吧！","commented":"發表於","load-more":"加載更多","power":"由 %{link} 驅動","counts":"%{counts} 條評論","sort-asc":"從舊到新排序","sort-desc":"從新到舊排序","logout":"註銷","anonymous":"未登錄用戶"}
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"init": "Gitalking ...",
-	"no-found-related": "Related %{link} not found",
-	"please-contact": "Please contact %{user} to initialize the comment",
-	"init-issue": "Init Issue",
-	"leave-a-comment": "Leave a comment",
-	"comment": "Comment",
-	"support-markdown": "Markdown is supported",
-	"login-with-github": "Login with Github",
-	"first-comment-person": "Be the first guy leaving a comment!",
-	"commented": "commented",
-	"load-more": "Load more",
-	"power": "%{link} v1.0.0",
-	"counts": "%{counts} comment |||| %{counts} comments",
-	"sort-asc": "Sort by Oldest",
-	"sort-desc": "Sort by Latest",
-	"logout": "Logout",
-	"anonymous": "Anonymous"
-};
+module.exports = {"init":"Gitalking ...","no-found-related":"Related %{link} not found","please-contact":"Please contact %{user} to initialize the comment","init-issue":"Init Issue","leave-a-comment":"Leave a comment","comment":"Comment","support-markdown":"Markdown is supported","login-with-github":"Login with Github","first-comment-person":"Be the first guy leaving a comment!","commented":"commented","load-more":"Load more","power":"%{link} v1.0.0","counts":"%{counts} comment |||| %{counts} comments","sort-asc":"Sort by Oldest","sort-desc":"Sort by Latest","logout":"Logout","anonymous":"Anonymous"}
 
 /***/ }),
 /* 38 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"init": "Gitalking ...",
-	"no-found-related": "Link %{link} no encontrado",
-	"please-contact": "Por favor contacta con %{user} para inicializar el comentario",
-	"init-issue": "Iniciar Issue",
-	"leave-a-comment": "Deja un comentario",
-	"comment": "Comentario",
-	"support-markdown": "Markdown es soportado",
-	"login-with-github": "Entrar con Github",
-	"first-comment-person": "Sé el primero en dejar un comentario!",
-	"commented": "comentó",
-	"load-more": "Cargar más",
-	"power": "%{link} v1.0.0",
-	"counts": "%{counts} comentario |||| %{counts} comentarios",
-	"sort-asc": "Ordenar por Antiguos",
-	"sort-desc": "Ordenar por Recientes",
-	"logout": "Salir",
-	"anonymous": "Anónimo"
-};
+module.exports = {"init":"Gitalking ...","no-found-related":"Link %{link} no encontrado","please-contact":"Por favor contacta con %{user} para inicializar el comentario","init-issue":"Iniciar Issue","leave-a-comment":"Deja un comentario","comment":"Comentario","support-markdown":"Markdown es soportado","login-with-github":"Entrar con Github","first-comment-person":"Sé el primero en dejar un comentario!","commented":"comentó","load-more":"Cargar más","power":"%{link} v1.0.0","counts":"%{counts} comentario |||| %{counts} comentarios","sort-asc":"Ordenar por Antiguos","sort-desc":"Ordenar por Recientes","logout":"Salir","anonymous":"Anónimo"}
 
 /***/ }),
 /* 39 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"init": "Gitalking ...",
-	"no-found-related": "Lien %{link} non trouvé",
-	"please-contact": "S’il vous plaît contactez %{user} pour initialiser les commentaires",
-	"init-issue": "Initialisation des issues",
-	"leave-a-comment": "Laisser un commentaire",
-	"comment": "Commentaire",
-	"support-markdown": "Markdown est supporté",
-	"login-with-github": "Se connecter avec Github",
-	"first-comment-person": "Être le premier à laisser un commentaire !",
-	"commented": "commenter",
-	"load-more": "Charger plus",
-	"power": "%{link} v1.0.0",
-	"counts": "%{counts} commentaire |||| %{counts} commentaires",
-	"sort-asc": "Trier par plus ancien",
-	"sort-desc": "Trier par plus récent",
-	"logout": "Déconnexion",
-	"anonymous": "Anonyme"
-};
+module.exports = {"init":"Gitalking ...","no-found-related":"Lien %{link} non trouvé","please-contact":"S’il vous plaît contactez %{user} pour initialiser les commentaires","init-issue":"Initialisation des issues","leave-a-comment":"Laisser un commentaire","comment":"Commentaire","support-markdown":"Markdown est supporté","login-with-github":"Se connecter avec Github","first-comment-person":"Être le premier à laisser un commentaire !","commented":"commenter","load-more":"Charger plus","power":"%{link} v1.0.0","counts":"%{counts} commentaire |||| %{counts} commentaires","sort-asc":"Trier par plus ancien","sort-desc":"Trier par plus récent","logout":"Déconnexion","anonymous":"Anonyme"}
 
 /***/ }),
 /* 40 */
