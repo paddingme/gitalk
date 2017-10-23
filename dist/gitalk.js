@@ -5008,7 +5008,8 @@ var GitalkComponent = function (_Component) {
       var comment = _this.state.comment;
 
       localStorage.setItem(_const.GT_COMMENT, encodeURIComponent(comment));
-      location.href = _this.loginLink;
+      //location.href = this.loginLink
+      location.href = '/auth/github';
     };
 
     _this.handleIssueCreate = function () {
@@ -5067,7 +5068,7 @@ var GitalkComponent = function (_Component) {
 
     _this.handleLogout = function () {
       _this.logout();
-      location.reload();
+      // location.reload()
     };
 
     _this.handleCommentFocus = function (e) {
@@ -5173,6 +5174,8 @@ var GitalkComponent = function (_Component) {
         });
       });
     } else {
+
+      _this.accessToken = _this.options.githubToken;
       _this.getInit().then(function () {
         return _this.setState({ isIniting: false });
       }).catch(function (err) {
@@ -5217,7 +5220,7 @@ var GitalkComponent = function (_Component) {
       }).then(function (res) {
         _this3.setState({ user: res.data });
       }).catch(function (err) {
-        _this3.logout();
+        //this.logout()
       });
     }
   }, {
@@ -5336,7 +5339,8 @@ var GitalkComponent = function (_Component) {
     key: 'logout',
     value: function logout() {
       this.setState({ user: null });
-      localStorage.removeItem(_const.GT_ACCESS_TOKEN);
+      // localStorage.removeItem(GT_ACCESS_TOKEN)
+      location.href = '/logout';
     }
   }, {
     key: 'reply',
@@ -5608,10 +5612,13 @@ var GitalkComponent = function (_Component) {
   }, {
     key: 'accessToken',
     get: function get() {
-      return this._accessToke || localStorage.getItem(_const.GT_ACCESS_TOKEN);
+      // return this._accessToken || localStorage.getItem(GT_ACCESS_TOKEN)
+
+      return this._accessToken;
     },
     set: function set(token) {
-      localStorage.setItem(_const.GT_ACCESS_TOKEN, token);
+      //  // 这个 token 不保存
+      // localStorage.setItem(GT_ACCESS_TOKEN, token)
       this._accessToken = token;
     }
   }, {
@@ -11813,4 +11820,3 @@ module.exports = function (object, index, value) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=gitalk.js.map

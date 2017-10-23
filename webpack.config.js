@@ -84,7 +84,7 @@ module.exports = {
   },
   plugins: isDev ? [...plugins, new webpack.NoEmitOnErrorsPlugin()] : [...plugins, new ExtractTextPlugin('gitalk.css')],
 
-  devtool: isDev ? 'cheap-module-source-map' : 'source-map',
+  // devtool: isDev ? 'cheap-module-source-map' : 'source-map',
 
   devServer: {
     port: process.env.PORT || 8000,

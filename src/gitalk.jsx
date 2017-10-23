@@ -121,6 +121,9 @@ class GitalkComponent extends Component {
         })
       })
     } else {
+
+       
+      this.accessToken = this.options.githubToken;
       this.getInit()
         .then(() => this.setState({ isIniting: false }))
         .catch(err => {
@@ -140,10 +143,13 @@ class GitalkComponent extends Component {
   }
 
   get accessToken () {
-    return this._accessToke || localStorage.getItem(GT_ACCESS_TOKEN)
+    // return this._accessToken || localStorage.getItem(GT_ACCESS_TOKEN)
+
+    return this._accessToken
   }
   set accessToken (token) {
-    localStorage.setItem(GT_ACCESS_TOKEN, token)
+    //  // 这个 token 不保存
+    // localStorage.setItem(GT_ACCESS_TOKEN, token)
     this._accessToken = token
   }
   get loginLink () {
@@ -168,7 +174,7 @@ class GitalkComponent extends Component {
     }).then(res => {
       this.setState({ user: res.data })
     }).catch(err => {
-      this.logout()
+      //this.logout()
     })
   }
   getIssue () {
@@ -284,7 +290,8 @@ class GitalkComponent extends Component {
   }
   logout () {
     this.setState({ user: null })
-    localStorage.removeItem(GT_ACCESS_TOKEN)
+    // localStorage.removeItem(GT_ACCESS_TOKEN)
+    location.href = '/logout'
   }
   getRef = e => {
     this.publicBtnEL = e
@@ -325,7 +332,8 @@ class GitalkComponent extends Component {
   handleLogin = () => {
     const { comment } = this.state
     localStorage.setItem(GT_COMMENT, encodeURIComponent(comment))
-    location.href = this.loginLink
+    //location.href = this.loginLink
+    location.href = '/auth/github'
   }
   handleIssueCreate = () => {
     this.setState({ isIssueCreating: true })
@@ -372,7 +380,7 @@ class GitalkComponent extends Component {
   handleCommentChange = e => this.setState({ comment: e.target.value })
   handleLogout = () => {
     this.logout()
-    location.reload()
+    // location.reload()
   }
   handleCommentFocus = e => {
     const { distractionFreeMode } = this.options
